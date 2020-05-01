@@ -1,0 +1,20 @@
+import hudson.model.*
+import hudson.EnvVars
+import groovy.json.JsonSlurperClassic
+import groovy.json.JsonBuilder
+import groovy.json.JsonOutput
+import java.net.URL
+
+
+node{
+ stage('Checkout') {
+ git 'https://github.com/AnjuMeleth/hello-world-java.git'
+
+ }
+ stage('Build') {
+     javac HelloWorld.java
+ }
+ stage('Run') {
+     java HelloWorld
+ }
+}
