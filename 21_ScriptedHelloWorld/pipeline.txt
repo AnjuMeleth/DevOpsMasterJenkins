@@ -1,3 +1,4 @@
+  
 import hudson.model.*
 import hudson.EnvVars
 import groovy.json.JsonSlurperClassic
@@ -12,9 +13,12 @@ node{
 
  }
  stage('Build') {
-     javac HelloWorld.java
+    sh 'javac HelloWorld.java'
  }
  stage('Run') {
-     java HelloWorld
+    sh 'java HelloWorld'
  }
+ stage('Cleanup') {
+     cleanWs()
+ }	
 }
