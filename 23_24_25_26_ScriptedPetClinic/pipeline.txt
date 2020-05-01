@@ -1,0 +1,56 @@
+import hudson.model.*
+import hudson.EnvVars
+import groovy.json.JsonSlurperClassic
+import groovy.json.JsonBuilder
+import groovy.json.JsonOutput
+import java.net.URL
+
+
+node{
+ stage('Checkout') {
+ git 'https://github.com/AnjuMeleth/spring-petclinic.git'
+
+    }
+ stage('Build') {
+ dir('') {
+     withMaven(
+        // Maven installation declared in the Jenkins "Global Tool Configuration"
+        maven: 'M3') {
+            sh 'mvn compile'
+            }
+        }
+    }
+ stage('Test') {
+ dir('') {
+     withMaven(
+        // Maven installation declared in the Jenkins "Global Tool Configuration"
+        maven: 'M3') {
+            sh 'mvn test'
+            }
+        }
+    } 
+stage('Package') {
+ dir('') {
+     withMaven(
+        // Maven installation declared in the Jenkins "Global Tool Configuration"
+        maven: 'M3') {
+            sh 'mvn package'
+            }
+        }
+    } 
+     
+stage('Report') {
+ dir('') {
+     withMaven(
+        // Maven installation declared in the Jenkins "Global Tool Configuration"
+        maven: 'M3') {
+            sh 'mvn verify'
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target/site/jacoco', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
+            }
+        }
+    }     
+stage('clean up') {
+    echo "cleaning up the workspace"
+    cleanWs()
+    }
+}// node
