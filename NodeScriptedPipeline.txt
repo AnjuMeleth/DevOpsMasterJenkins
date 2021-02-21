@@ -1,0 +1,35 @@
+import hudson.model.*
+import hudson.EnvVars
+import groovy.json.JsonSlurperClassic
+import groovy.json.JsonBuilder
+import groovy.json.JsonOutput
+import java.net.URL
+
+
+node{
+    
+ environment {
+     CI = 'true'
+ }
+ stage('Checkout') {
+ // git branch: 'main', url: 'https://github.com/AnjuMeleth/SpringPetClinic.git'
+ git 'https://github.com/AnjuMeleth/simple-node-js-react-npm-app.git'
+
+    }
+ stage('Build') {
+     nodejs('N1') {
+        sh 'npm install'
+        sh 'npm build'
+        }
+ }
+ stage('Test') {
+      nodejs('N1') {
+            sh 'npm test'
+            }
+    }
+
+stage('clean up') {
+    echo "cleaning up the workspace"
+    cleanWs()
+    }
+}// node
